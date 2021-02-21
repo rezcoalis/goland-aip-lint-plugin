@@ -53,13 +53,13 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
 
     @Override
     public boolean isModified() {
-        return !apiLinterExePathField.getText().equals(appState.executable) || !importPathField.getText().equals(projState.importPath);
+        return !apiLinterExePathField.getText().equals(appState.executable) || !importPathField.getText().equals(projState.getImportPath());
     }
 
     @Override
     public void apply() throws ConfigurationException {
         appState.executable = apiLinterExePathField.getText();
-        projState.importPath = importPathField.getText();
+        projState.setImportPath(importPathField.getText());
         ProjectConfigService.doReparse(project);
     }
 
@@ -70,7 +70,7 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
 
     private void loadSettings() {
         apiLinterExePathField.setText(appState.executable);
-        importPathField.setText(projState.importPath);
+        importPathField.setText(projState.getImportPath());
     }
 
     private void addListeners() {
