@@ -19,7 +19,7 @@ dependencies {
 intellij {
     version '2020.1'
     setPlugins("idea.plugin.protoeditor:2.2.0")
-    sandboxDirectory "/home/fctorial/IdeaProjects/SANDBOX"
+//    sandboxDirectory "/home/fctorial/IdeaProjects/SANDBOX"
     localPath "/home/fctorial/software/idea-IU"
     buildSearchableOptions.enabled = false
     intellij.updateSinceUntilBuild false
