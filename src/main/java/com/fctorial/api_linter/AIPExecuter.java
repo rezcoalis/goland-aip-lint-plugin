@@ -51,11 +51,14 @@ public class AIPExecuter {
 
         commandLine.setExePath(executable);
 
-        final String configFile = LinterConfigFileService.getConfigFilePath(project);
+        final String configFile = ProjectConfigService.getConfigFilePath(project);
         if (configFile != null) {
             commandLine.addParameter("--config");
             commandLine.addParameter(configFile);
         }
+
+        commandLine.addParameter("-I");
+        commandLine.addParameter(ProjectConfigService.getImportPath(project));
 
         commandLine.addParameter("--output-format");
         commandLine.addParameter("json");
