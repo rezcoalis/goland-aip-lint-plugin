@@ -12,10 +12,11 @@ class Location {
     public Position end_position;
 }
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 class LinterWarning {
     public String message;
     public Location location;
+    public String rule_id;
+    public String rule_doc_uri;
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)

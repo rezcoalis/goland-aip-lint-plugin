@@ -2,6 +2,7 @@ package com.fctorial.api_linter;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -46,16 +47,11 @@ public class AIPAnnotator extends ExternalAnnotator<Editor, List<AIPWarning>> {
                 return;
             }
             TextRange range = new TextRange(startOffset, endOffset);
-            if (warning instanceof AIPError) {
-                holder.createErrorAnnotation(range, warning.reason);
-            } else {
-                holder.createWarningAnnotation(range, warning.reason);
-            }
+            holder.newAnnotation(HighlightSeverity.WARNING, warning.rule_id + ": " + warning.reason)
+                    .range(range)
+                    .withFix(new URIAction(warning.rule_id, warning.rule_doc_uri))
+                    .create();
         });
-    }
-
-    private boolean isProperRange(int startOffset, int endOffset) {
-        return startOffset <= endOffset && startOffset >= 0;
     }
 }
 

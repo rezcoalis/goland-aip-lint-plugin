@@ -8,12 +8,25 @@ import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.TextFieldWithHistoryWithBrowseButton;
+import com.intellij.ui.components.*;
+import com.intellij.util.Function;
+import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListDataListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.fctorial.api_linter.Utils.listToArray;
 
 public class ApplicationConfigurationPanel implements SearchableConfigurable {
     private static final Logger LOGGER = Logger.getInstance(ApplicationConfigurationPanel.class.getPackage().getName());
@@ -23,7 +36,10 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
 
     private TextFieldWithHistoryWithBrowseButton apiLinterExePathField;
     private JPanel rootPanel;
-    private TextFieldWithHistoryWithBrowseButton importPathField;
+    private JButton addButton;
+    private JScrollPane scroll;
+    private JPanel panel;
+    private ArrayList<String> importPathsList;
 
     public ApplicationConfigurationPanel(Project project) {
         this.project = project;
@@ -53,13 +69,24 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
 
     @Override
     public boolean isModified() {
-        return !apiLinterExePathField.getText().equals(appState.executable) || !importPathField.getText().equals(projState.getImportPath());
+        if (!apiLinterExePathField.getText().equals(appState.executable)) {
+            return true;
+        }
+        if (importPathsList.size() != projState.getImportPaths().size()) {
+            return true;
+        }
+        for (int i = 0; i < importPathsList.size(); i++) {
+            if (!importPathsList.get(i).equals(projState.getImportPaths().get(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void apply() throws ConfigurationException {
         appState.executable = apiLinterExePathField.getText();
-        projState.setImportPath(importPathField.getText());
+        projState.setImportPaths(new ArrayList<>(importPathsList));
         ProjectConfigService.doReparse(project);
     }
 
@@ -70,7 +97,33 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
 
     private void loadSettings() {
         apiLinterExePathField.setText(appState.executable);
-        importPathField.setText(projState.getImportPath());
+        importPathsList = new ArrayList<>(projState.getImportPaths());
+        syncList();
+    }
+
+    private void syncList() {
+        panel.removeAll();
+        for (int i=0; i<importPathsList.size(); i++) {
+            String path = importPathsList.get(i);
+            int finalI = i;
+            panel.add(
+                    new ImportPathEntryUI(
+                            path,
+                            (String newValue) -> {
+                                importPathsList.set(finalI, newValue);
+                                syncList();
+                                return null;
+                            },
+                            (Void v) -> {
+                                importPathsList.remove(finalI);
+                                syncList();
+                                return null;
+                            }
+                    )
+            );
+        }
+        panel.revalidate();
+        panel.paintImmediately(0, 0, 100000, 100000);
     }
 
     private void addListeners() {
@@ -85,7 +138,7 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
             }
             apiLinterExePathField.setText(file.getPath());
         });
-        importPathField.addActionListener((ActionEvent event) -> {
+        addButton.addActionListener((ActionEvent event) -> {
             final VirtualFile file = FileChooser.chooseFile(
                     FileChooserDescriptorFactory.createSingleFileDescriptor(),
                     null,
@@ -94,7 +147,37 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
             if (file == null) {
                 return;
             }
-            importPathField.setText(file.getPath());
+            importPathsList.add(file.getPath());
+            syncList();
         });
     }
+
+    private void createUIComponents() {
+        panel = new JBPanel<>();
+        BoxLayout b = new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.setLayout(b);
+    }
 }
+
+class ImportPathEntryUI extends JBPanel<ImportPathEntryUI> {
+    private final String path;
+    private final JButton removeBtn;
+    JLabel text;
+
+    public ImportPathEntryUI(String path, Function<String, Void> onEdit, Function<Void, Void> onDelete) {
+        this.path = path;
+        this.text = new JBLabel(path);
+        this.text.setMaximumSize(new Dimension(10000, 30));
+        this.text.setSize(0, 1);
+        this.removeBtn = new JButton("-");
+        this.removeBtn.setMaximumSize(new Dimension(100, 30));
+        this.removeBtn.addActionListener((ActionEvent ev) -> {
+            onDelete.fun(null);
+        });
+        BoxLayout layout = new BoxLayout(this, BoxLayout.X_AXIS);
+        setLayout(layout);
+        add(this.text);
+        add(this.removeBtn);
+    }
+}
+

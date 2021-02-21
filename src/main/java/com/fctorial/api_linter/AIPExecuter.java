@@ -57,8 +57,12 @@ public class AIPExecuter {
             commandLine.addParameter(configFile);
         }
 
-        commandLine.addParameter("-I");
-        commandLine.addParameter(ProjectConfigService.getImportPath(project));
+        for (String pe : ProjectConfigService.getImportPaths(project)) {
+            if (! pe.equals("")) {
+                commandLine.addParameter("-I");
+                commandLine.addParameter(pe);
+            }
+        }
 
         commandLine.addParameter("--output-format");
         commandLine.addParameter("json");
@@ -99,7 +103,9 @@ public class AIPExecuter {
                         p.location.end_position.line_number - 1,
                         // second location in linter output is inclusive, and intellij treats second location as exclusive
                         p.location.end_position.column_number,
-                        p.message
+                        p.message,
+                        p.rule_id,
+                        p.rule_doc_uri
                 );
                 result.add(w);
             }

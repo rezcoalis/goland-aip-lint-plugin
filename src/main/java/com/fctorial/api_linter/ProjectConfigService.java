@@ -24,7 +24,7 @@ import java.util.List;
 public class ProjectConfigService implements PersistentStateComponent<ProjectConfigService> {
     private String jsonFile;
     private String yamlFile;
-    private String importPath;
+    private List<String> importPaths;
 
     private ProjectConfigService() {
 
@@ -33,7 +33,8 @@ public class ProjectConfigService implements PersistentStateComponent<ProjectCon
     private ProjectConfigService(Project project) {
         jsonFile = new File(project.getBasePath(), ".api-linter.json").getPath();
         yamlFile = new File(project.getBasePath(), ".api-linter.yaml").getPath();
-        importPath = project.getBasePath();
+        importPaths = new ArrayList<>();
+        importPaths.add(project.getBasePath());
         MessageBus messageBus = project.getMessageBus();
         messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
             @Override
@@ -60,7 +61,6 @@ public class ProjectConfigService implements PersistentStateComponent<ProjectCon
                     fileList.add(psiFile.getVirtualFile());
                 }
             }
-            System.out.println("nice");
             FileContentUtil.reparseFiles(project, fileList, false);
         }
     }
@@ -79,8 +79,8 @@ public class ProjectConfigService implements PersistentStateComponent<ProjectCon
         return project.getService(ProjectConfigService.class).getConfigFilePath();
     }
 
-    public static String getImportPath(Project project) {
-        return project.getService(ProjectConfigService.class).importPath;
+    public static List<String> getImportPaths(Project project) {
+        return project.getService(ProjectConfigService.class).importPaths;
     }
 
     public static void doReparse(Project project) {
@@ -94,9 +94,9 @@ public class ProjectConfigService implements PersistentStateComponent<ProjectCon
 
     @Override
     public void loadState(@NotNull ProjectConfigService projectConfigService) {
-        setImportPath(projectConfigService.getImportPath());
+        if (projectConfigService.getImportPaths() != null)
+            setImportPaths(projectConfigService.getImportPaths());
     }
-
 
     public String getJsonFile() {
         return jsonFile;
@@ -114,11 +114,11 @@ public class ProjectConfigService implements PersistentStateComponent<ProjectCon
         this.yamlFile = yamlFile;
     }
 
-    public String getImportPath() {
-        return importPath;
+    public List<String> getImportPaths() {
+        return importPaths;
     }
 
-    public String setImportPath(String p) {
-        return importPath = p;
+    public void setImportPaths(List<String> p) {
+        importPaths = p;
     }
 }

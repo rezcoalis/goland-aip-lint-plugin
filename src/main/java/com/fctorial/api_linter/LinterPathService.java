@@ -36,7 +36,11 @@ public class LinterPathService implements PersistentStateComponent<LinterPathSer
                 }
             }
         }
-        Utils.notify(msg);
+        if (msg.equals("")) {
+            Utils.notify("Please delete the idea sandbox directory and rerun for debug message");
+        } else {
+            Utils.notify(msg);
+        }
         return service;
     }
 
