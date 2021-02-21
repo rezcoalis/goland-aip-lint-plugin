@@ -1,0 +1,13 @@
+[
+  {
+    "disabled_rules": [
+      "all"
+    ],
+    "enabled_rules": [
+      "0158"
+    ],
+    "included_paths": [
+      "**/*"
+    ]
+  }
+]

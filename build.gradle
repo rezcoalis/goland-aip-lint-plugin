@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.6.5'
+}
+
+group 'com.fctorial.api-linter-intellij'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
+}
+
+intellij {
+    version '2020.1'
+    setPlugins("idea.plugin.protoeditor:2.2.0")
+    sandboxDirectory "/home/fctorial/IdeaProjects/SANDBOX"
+    localPath "/home/fctorial/software/idea-IU"
+    buildSearchableOptions.enabled = false
+    intellij.updateSinceUntilBuild false
+}

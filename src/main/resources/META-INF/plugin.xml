@@ -1,0 +1,17 @@
+<idea-plugin>
+    <id>com.fctorial.api-linter-intellij</id>
+    <name>AIP Linter</name>
+    <vendor url="https://fctorial.github.io"></vendor>
+
+    <idea-version since-build="183"/>
+
+    <depends>com.intellij.modules.lang</depends>
+    <depends>idea.plugin.protoeditor</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <externalAnnotator language="protobuf" implementationClass="com.fctorial.api_linter.AIPAnnotator" />
+        <applicationService serviceImplementation="com.fctorial.api_linter.LinterPathService" />
+        <projectService serviceImplementation="com.fctorial.api_linter.LinterConfigFileService" />
+        <applicationConfigurable parentId="tools" instance="com.fctorial.api_linter.ApplicationConfigurationPanel" displayName="AIP Linter"/>
+    </extensions>
+</idea-plugin>
