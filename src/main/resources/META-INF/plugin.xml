@@ -13,8 +13,5 @@
         <applicationService serviceImplementation="com.fctorial.api_linter.LinterPathService" />
         <projectService serviceImplementation="com.fctorial.api_linter.ProjectConfigService" />
         <projectConfigurable parentId="tools" instance="com.fctorial.api_linter.ApplicationConfigurationPanel" displayName="AIP Linter"/>
-<!--        <intentionAction id="proto_doc_intention" factoryClass="com.fctorial.api_linter.IC">-->
-<!--            <className>com.fctorial.api_linter.URIAction</className>-->
-<!--        </intentionAction>-->
     </extensions>
 </idea-plugin>
