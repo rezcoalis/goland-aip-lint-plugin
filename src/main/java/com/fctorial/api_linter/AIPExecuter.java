@@ -87,7 +87,18 @@ public class AIPExecuter {
             return null;
         }
         if (process.exitValue() != 0) {
-            return null;
+            List<AIPWarning> result = new ArrayList<>();
+            result.add(
+                    new AIPWarning(
+                            0, 0,
+                            10000, 10000,
+                            "api-linter executable exited with non-zero status",
+                            "api-linter error",
+                            ""
+
+                    )
+            );
+            return result;
         } else {
             List<AIPWarning> result = new ArrayList<>();
 

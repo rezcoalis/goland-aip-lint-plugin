@@ -42,6 +42,9 @@ public class AIPAnnotator extends ExternalAnnotator<Editor, List<AIPWarning>> {
             int startOffset = StringUtil.lineColToOffset(file.getText(), warning.y1, warning.x1);
             startOffset = clamp(startOffset, 0, file.getTextLength()-1);
             int endOffset = StringUtil.lineColToOffset(file.getText(), warning.y2, warning.x2);
+            if (endOffset == -1) {
+                endOffset = file.getTextLength()-1;
+            }
             endOffset = clamp(endOffset, 0, file.getTextLength()-1);
             if (startOffset >= endOffset) {
                 return;
