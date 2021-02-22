@@ -91,7 +91,7 @@ public class AIPExecuter {
             result.add(
                     new AIPWarning(
                             0, 0,
-                            10000, 10000,
+                            1, 0,
                             "api-linter executable exited with non-zero status",
                             "api-linter error",
                             ""
