@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static org.locationtech.jts.math.MathUtil.clamp;
+import static com.intellij.util.MathUtil.clamp;
 
 public class AIPAnnotator extends ExternalAnnotator<Editor, List<AIPWarning>> {
     private static final Logger LOGGER = Logger.getInstance(AIPAnnotator.class);
