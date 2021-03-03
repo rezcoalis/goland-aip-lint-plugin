@@ -1,12 +1,13 @@
 <idea-plugin>
     <id>dev.alis.os.aip-lint-plugin</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <name>AIP Linter</name>
 
     <!-- Text to display as company information on Preferences/Settings | Plugin page -->
     <vendor url="https://alis.capital">alis_ - AI Driven Investments</vendor>
 
-    <idea-version since-build="183"/>
+    <!-- Minimum and maximum build of IDE compatible with the plugin -->
+    <idea-version since-build="203"/>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>idea.plugin.protoeditor</depends>
@@ -22,7 +23,7 @@
     <change-notes>
         <![CDATA[
       <ul>
-        <li><b>1.0.3</b> Initial public release.</li>
+        <li><b>1.0.4</b> Initial public release.</li>
       </ul>
     ]]>
     </change-notes>
