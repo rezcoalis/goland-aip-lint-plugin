@@ -1,6 +1,7 @@
 <idea-plugin>
     <id>dev.alis.os.api-linter-intellij</id>
-    <name>API Linter</name>
+    <version>1.0.1</version>
+    <name>AIP Linter</name>
 
     <!-- Text to display as company information on Preferences/Settings | Plugin page -->
     <vendor url="https://alis.capital">alis_ - AI Driven Investments</vendor>
@@ -13,7 +14,7 @@
     <!-- Text to display as description on Preferences/Settings | Plugin page -->
     <description>
         <![CDATA[
-      The API linter provides real-time checks for compliance with many of Google’s API standards, documented using
+      The AIP linter provides real-time checks for compliance with many of Google’s API standards, documented using
       API Improvement Proposals. It operates on API surfaces defined in protocol buffers.
     ]]>
     </description>
