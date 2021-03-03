@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>dev.alis.os.api-linter-intellij</id>
-    <version>1.0.1</version>
+    <id>dev.alis.os.aip-lint-plugin</id>
+    <version>1.0.3</version>
     <name>AIP Linter</name>
 
     <!-- Text to display as company information on Preferences/Settings | Plugin page -->
@@ -22,7 +22,7 @@
     <change-notes>
         <![CDATA[
       <ul>
-        <li><b>1.0.1</b> Initial release.</li>
+        <li><b>1.0.3</b> Initial public release.</li>
       </ul>
     ]]>
     </change-notes>
