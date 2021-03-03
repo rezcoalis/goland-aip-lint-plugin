@@ -1,4 +1,4 @@
-package com.fctorial.api_linter;
+package dev.alis.os.api_linter;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;

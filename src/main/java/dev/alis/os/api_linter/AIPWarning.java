@@ -1,4 +1,4 @@
-package com.fctorial.api_linter;
+package dev.alis.os.api_linter;
 
 public class AIPWarning {
     public static final AIPWarning ERROR = new AIPWarning(null, null, null, null, null, null, null);

@@ -1,4 +1,4 @@
-package com.fctorial.api_linter;
+package dev.alis.os.api_linter;
 
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;

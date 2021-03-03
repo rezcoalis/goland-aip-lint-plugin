@@ -1,4 +1,4 @@
-package com.fctorial.api_linter;
+package dev.alis.os.api_linter;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooser;
@@ -26,7 +26,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fctorial.api_linter.Utils.listToArray;
+import static dev.alis.os.api_linter.Utils.listToArray;
 
 public class ApplicationConfigurationPanel implements SearchableConfigurable {
     private static final Logger LOGGER = Logger.getInstance(ApplicationConfigurationPanel.class.getPackage().getName());
