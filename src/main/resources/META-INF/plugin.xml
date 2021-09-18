@@ -1,6 +1,5 @@
 <idea-plugin>
     <id>dev.alis.os.aip-lint-plugin</id>
-    <version>1.0.4</version>
     <name>AIP Linter</name>
 
     <!-- Text to display as company information on Preferences/Settings | Plugin page -->
@@ -33,5 +32,6 @@
         <applicationService serviceImplementation="dev.alis.os.api_linter.LinterPathService" />
         <projectService serviceImplementation="dev.alis.os.api_linter.ProjectConfigService" />
         <projectConfigurable parentId="tools" instance="dev.alis.os.api_linter.ApplicationConfigurationPanel" displayName="AIP Linter"/>
+        <notificationGroup id="aip_notifications" displayType="BALLOON" />
     </extensions>
 </idea-plugin>

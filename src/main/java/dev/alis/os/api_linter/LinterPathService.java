@@ -24,13 +24,20 @@ public class LinterPathService implements PersistentStateComponent<LinterPathSer
         LinterPathService service = ServiceManager.getService(LinterPathService.class);
         if (service.executable.equals("")) {
             for (String dirname : System.getenv("PATH").split(File.pathSeparator)) {
+                System.out.println("Trying " + dirname);
                 File file = new File(dirname, "api-linter");
                 if (file.isFile() && file.canExecute()) {
                     service.executable =  file.getAbsolutePath();
                     break;
                 }
+                File exe = new File(dirname, "api-linter.exe");
+                if (exe.isFile() && exe.canExecute()) {
+                    service.executable =  exe.getAbsolutePath();
+                    break;
+                }
             }
         }
+        System.out.println("Found " + service.executable);
         return service;
     }
 

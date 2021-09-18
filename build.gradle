@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'dev.alis.os.api-linter-intellij'
-version '1.0.4'
+version '1.0.5'
 
 sourceCompatibility = 1.8
 
@@ -17,8 +17,8 @@ dependencies {
 }
 
 intellij {
-    version '2020.3'
-    setPlugins("idea.plugin.protoeditor:2.2.1")
+    version '2021.2'
+    setPlugins("idea.plugin.protoeditor:212.4746.57")
 //    sandboxDirectory "/home/fctorial/IdeaProjects/SANDBOX"
 //    localPath "/home/fctorial/software/idea-IU"
     buildSearchableOptions.enabled = false

@@ -35,7 +35,7 @@ public class URIAction implements IntentionAction {
 
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile psiFile) throws IncorrectOperationException {
-        Utils.browse(uri);
+        Utils.browse(project, uri);
     }
 
     @Override
