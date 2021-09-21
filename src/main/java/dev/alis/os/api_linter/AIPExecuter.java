@@ -40,7 +40,7 @@ public class AIPExecuter {
 
     private static List<AIPWarning> runLinter(Project project, Path path) {
         // ref. https://intellij-support.jetbrains.com/hc/en-us/community/posts/360004284939-How-to-trigger-ExternalAnnotator-running-immediately-after-saving-the-code-change-
-        final String executable = LinterPathService.getInstance().executable;
+        final String executable = LinterPathService.getInstance(project).executable;
         if (executable.equals("")) {
             return null;
         }

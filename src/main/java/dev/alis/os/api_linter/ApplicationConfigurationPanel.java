@@ -43,7 +43,7 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
 
     public ApplicationConfigurationPanel(Project project) {
         this.project = project;
-        this.appState = LinterPathService.getInstance().getState();
+        this.appState = LinterPathService.getInstance(project).getState();
         this.projState = project.getService(ProjectConfigService.class);
     }
 

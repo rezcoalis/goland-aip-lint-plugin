@@ -1,10 +1,8 @@
 package dev.alis.os.api_linter;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,8 +18,8 @@ public class LinterPathService implements PersistentStateComponent<LinterPathSer
         LOGGER.debug("ProjectService instantiated.");
     }
 
-    static LinterPathService getInstance() {
-        LinterPathService service = ServiceManager.getService(LinterPathService.class);
+    static LinterPathService getInstance(Project project) {
+        LinterPathService service = project.getService(LinterPathService.class);
         if (service.executable.equals("")) {
             for (String dirname : System.getenv("PATH").split(File.pathSeparator)) {
                 System.out.println("Trying " + dirname);
