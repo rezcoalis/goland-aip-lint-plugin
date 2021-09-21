@@ -22,6 +22,7 @@
     <change-notes>
         <![CDATA[
       <ul>
+        <li><b>1.0.5</b> Update packages to remove dependencies on Deprecated packages..</li>
         <li><b>1.0.4</b> Initial public release.</li>
       </ul>
     ]]>
