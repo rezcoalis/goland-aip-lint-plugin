@@ -40,7 +40,7 @@ public class AIPExecuter {
 
     private static List<AIPWarning> runLinter(Project project, Path path) {
         // ref. https://intellij-support.jetbrains.com/hc/en-us/community/posts/360004284939-How-to-trigger-ExternalAnnotator-running-immediately-after-saving-the-code-change-
-        final String executable = LinterPathService.getInstance(project).executable;
+        final String executable = LinterPathService.getInstance().executable;
         if (executable.equals("")) {
             return null;
         }
@@ -58,7 +58,7 @@ public class AIPExecuter {
         }
 
         for (String pe : ProjectConfigService.getImportPaths(project)) {
-            if (! pe.equals("")) {
+            if (!pe.equals("")) {
                 commandLine.addParameter("-I");
                 commandLine.addParameter(pe);
             }
@@ -69,8 +69,41 @@ public class AIPExecuter {
 
         commandLine.addParameter(path.toString());
 
+
         try {
-            return parseLinterOutput(commandLine.createProcess());
+            Process process = commandLine.createProcess();
+            String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+            try {
+                process.waitFor();
+            } catch (InterruptedException e) {
+                LOGGER.error("Linter process interrupted!");
+                List<AIPWarning> result = new ArrayList<>();
+                result.add(
+                        new AIPWarning(
+                                0, 0,
+                                1, 0,
+                                "api-linter executable was interruptedd",
+                                "api-linter error",
+                                ""
+                        )
+                );
+                return result;
+            }
+            if (process.exitValue() != 0) {
+                List<AIPWarning> result = new ArrayList<>();
+                result.add(
+                        new AIPWarning(
+                                0, 0,
+                                1, 0,
+                                "api-linter executable exited with non-zero status",
+                                "api-linter error",
+                                ""
+                        )
+                );
+                return result;
+            }
+            return parseLinterOutput(output);
         } catch (Throwable ex) {
             LOGGER.error("Encountered error while running api-linter", ex);
             return null;
@@ -79,50 +112,27 @@ public class AIPExecuter {
 
     static ObjectMapper mapper = new ObjectMapper();
 
-    private static List<AIPWarning> parseLinterOutput(final Process process) throws IOException {
-        try {
-            process.waitFor();
-        } catch (InterruptedException e) {
-            LOGGER.error("Linter process interrupted!");
-            return null;
-        }
-        if (process.exitValue() != 0) {
-            List<AIPWarning> result = new ArrayList<>();
-            result.add(
-                    new AIPWarning(
-                            0, 0,
-                            1, 0,
-                            "api-linter executable exited with non-zero status",
-                            "api-linter error",
-                            ""
+    private static List<AIPWarning> parseLinterOutput(String output) throws IOException {
+        List<AIPWarning> result = new ArrayList<>();
 
-                    )
+        LinterOutputModel op = mapper.readValue(output, LinterOutputModel[].class)[0];
+
+        for (LinterWarning p : op.problems) {
+            AIPWarning w = new AIPWarning(
+                    // intellij uses 0 based indexing, linter emits 1 based indexes
+                    p.location.start_position.line_number - 1,
+                    p.location.start_position.column_number - 1,
+                    p.location.end_position.line_number - 1,
+                    // second location in linter output is inclusive, and intellij treats second location as exclusive
+                    p.location.end_position.column_number,
+                    p.message,
+                    p.rule_id,
+                    p.rule_doc_uri
             );
-            return result;
-        } else {
-            List<AIPWarning> result = new ArrayList<>();
-
-            final InputStreamReader opStream = new InputStreamReader(process.getInputStream());
-
-            LinterOutputModel op = mapper.readValue(opStream, LinterOutputModel[].class)[0];
-
-            for (LinterWarning p : op.problems) {
-                AIPWarning w = new AIPWarning(
-                        // intellij uses 0 based indexing, linter emits 1 based indexes
-                        p.location.start_position.line_number - 1,
-                        p.location.start_position.column_number - 1,
-                        p.location.end_position.line_number - 1,
-                        // second location in linter output is inclusive, and intellij treats second location as exclusive
-                        p.location.end_position.column_number,
-                        p.message,
-                        p.rule_id,
-                        p.rule_doc_uri
-                );
-                result.add(w);
-            }
-
-            return result;
+            result.add(w);
         }
+
+        return result;
     }
 
     private static void writeData(String doc, Path tmp) throws IOException {

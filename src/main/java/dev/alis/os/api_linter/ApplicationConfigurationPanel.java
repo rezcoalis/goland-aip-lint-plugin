@@ -10,23 +10,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.TextFieldWithHistoryWithBrowseButton;
 import com.intellij.ui.components.*;
 import com.intellij.util.Function;
-import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.List;
-
-import static dev.alis.os.api_linter.Utils.listToArray;
 
 public class ApplicationConfigurationPanel implements SearchableConfigurable {
     private static final Logger LOGGER = Logger.getInstance(ApplicationConfigurationPanel.class.getPackage().getName());
@@ -43,7 +34,7 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
 
     public ApplicationConfigurationPanel(Project project) {
         this.project = project;
-        this.appState = LinterPathService.getInstance(project).getState();
+        this.appState = LinterPathService.getInstance().getState();
         this.projState = project.getService(ProjectConfigService.class);
     }
 
@@ -84,7 +75,7 @@ public class ApplicationConfigurationPanel implements SearchableConfigurable {
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
         appState.executable = apiLinterExePathField.getText();
         projState.setImportPaths(new ArrayList<>(importPathsList));
         ProjectConfigService.doReparse(project);
@@ -171,9 +162,7 @@ class ImportPathEntryUI extends JBPanel<ImportPathEntryUI> {
         this.text.setSize(0, 1);
         this.removeBtn = new JButton("-");
         this.removeBtn.setMaximumSize(new Dimension(100, 30));
-        this.removeBtn.addActionListener((ActionEvent ev) -> {
-            onDelete.fun(null);
-        });
+        this.removeBtn.addActionListener((ActionEvent ev) -> onDelete.fun(null));
         BoxLayout layout = new BoxLayout(this, BoxLayout.X_AXIS);
         setLayout(layout);
         add(this.text);

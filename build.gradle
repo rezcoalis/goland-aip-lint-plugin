@@ -6,7 +6,7 @@ plugins {
 group 'dev.alis.os.api-linter-intellij'
 version '1.0.6'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.9
 
 repositories {
     mavenCentral()
@@ -24,3 +24,4 @@ intellij {
     buildSearchableOptions.enabled = false
     intellij.updateSinceUntilBuild false
 }
+targetCompatibility = JavaVersion.VERSION_1_9
